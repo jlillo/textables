@@ -9,20 +9,65 @@
 | :-------- | :-------------                                                                              |
 | File      | Path to the CSV file that you want to convert. The file must be comma-separated with column headers indicating the name of the parameter. Columns corresponding to with column headers indicating the name of the parameter. Columns corresponding to uncertainties of each parameter (e.g., named "Param") should be named as follows: i) Symetric uncertainties: "eParam", ii) Assymetric uncertainties: "elParam", "euParam". If no uncertainty colum is found matching this nomenclature, then the number of significant decimal figures used for the Param values will correspond to that specified in the --nsig option (default=6 for "BJD" columns and 4 for any other).    |               
 |--nsig    |  [Integer] Number of significant figures by default for columns with no corresponding uncertainties  |
-|--join    |  [Boolean] Join the values and uncertainties in a single column like  $XX \pm YY$ (symetric uncertainties) or $XX^{+YY}_{-ZZ}$ (asymetric uncertainties).|
+|--JOIN    |  [Boolean] Join the values and uncertainties in a single column like  $XX \pm YY$ (symetric uncertainties) or $XX^{+YY}_{-ZZ}$ (asymetric uncertainties).|
 
-Output      
--------
-texTable    # LaTeX table obtained from the original CSV but this time including the latex format and 
-                appropriate number of significant decimal figures. The table will be written int he same 
-                directory as the original file and with the same filename but ending with ".tex" 
+### Output
+The output is a LaTeX table obtained from the original CSV but this time including the latex format and 
+appropriate number of significant decimal figures. The table will be written int he same directory as 
+the original file and with the same filename but ending with ".tex" 
 
 
-### Usage
+### Installation and Usage
+To use this code just clone or download this repository. The use it as follows:
 
-To 
+1. Prepare your CSV table including the columns you want and specifying the column names as indicated above 
+in the input "File".
+2. Run the code using the required options (see below)
+
+- If you want a single column including the value and uncertainty then run with "--JOIN" option, then run as follows:
 
 ```
  python textables.py example_table.csv --JOIN
 ```
+ 
+This will produce the following table:
 
+\begin{table}
+\begin{tabular}{cc}
+BJD & RV \\
+59397.642675 & $-23.2905 \pm 0.0021$ \\
+59403.647097 & $-23.2921 \pm 0.0022$ \\
+59408.616823 & $-23.2939 \pm 0.0022$ \\
+59412.629282 & $-23.2913 \pm 0.0021$ \\
+59420.600123 & $-23.2937 \pm 0.0021$ \\
+59425.662880 & $-23.3041 \pm 0.0022$ \\
+59430.654213 & $-23.2897 \pm 0.0018$ \\
+59446.684781 & $-23.2886 \pm 0.0020$ \\
+59455.644156 & $-23.2956 \pm 0.0019$ \\
+59460.694884 & $-23.2974 \pm 0.0020$ \\
+\end{tabular}
+\end{table}
+
+- If you want the uncertainties in a separate column, then run as follows:
+
+```
+ python textables.py example_table.csv
+```
+ 
+This will produce the following table:
+
+\begin{table}
+\begin{tabular}{ccc}
+BJD & RV & $\sigma_{\rm RV}$ \\
+59397.642675 & -23.2905 & 0.0021 \\
+59403.647097 & -23.2921 & 0.0022 \\
+59408.616823 & -23.2939 & 0.0022 \\
+59412.629282 & -23.2913 & 0.0021 \\
+59420.600123 & -23.2937 & 0.0021 \\
+59425.662880 & -23.3041 & 0.0022 \\
+59430.654213 & -23.2897 & 0.0018 \\
+59446.684781 & -23.2886 & 0.0020 \\
+59455.644156 & -23.2956 & 0.0019 \\
+59460.694884 & -23.2974 & 0.0020 \\
+\end{tabular}
+\end{table}
