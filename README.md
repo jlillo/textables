@@ -51,21 +51,21 @@ We want to move this to a publishable LaTeX table. Let's do it with two options:
  
 This will produce the following table:
 
-\begin{table} \n
-\begin{tabular}{cc} \n
-BJD & RV \\ \n
-59397.642675 & $-23.2905 \pm 0.0021$ \\ \n
-59403.647097 & $-23.2921 \pm 0.0022$ \\ \n
-59408.616823 & $-23.2939 \pm 0.0022$ \\ \n
-59412.629282 & $-23.2913 \pm 0.0021$ \\ \n
-59420.600123 & $-23.2937 \pm 0.0021$ \\ \n
-59425.662880 & $-23.3041 \pm 0.0022$ \\ \n
-59430.654213 & $-23.2897 \pm 0.0018$ \\ \n
-59446.684781 & $-23.2886 \pm 0.0020$ \\ \n
-59455.644156 & $-23.2956 \pm 0.0019$ \\ \n
-59460.694884 & $-23.2974 \pm 0.0020$ \\ \n
-\end{tabular} \n
-\end{table}  \n
+\begin{table}  <br>
+\begin{tabular}{cc}  <br>
+BJD & RV \\  <br>
+59397.642675 & $-23.2905 \pm 0.0021$ \\  <br>
+59403.647097 & $-23.2921 \pm 0.0022$ \\  <br>
+59408.616823 & $-23.2939 \pm 0.0022$ \\  <br>
+59412.629282 & $-23.2913 \pm 0.0021$ \\  <br>
+59420.600123 & $-23.2937 \pm 0.0021$ \\  <br>
+59425.662880 & $-23.3041 \pm 0.0022$ \\  <br>
+59430.654213 & $-23.2897 \pm 0.0018$ \\  <br>
+59446.684781 & $-23.2886 \pm 0.0020$ \\  <br>
+59455.644156 & $-23.2956 \pm 0.0019$ \\  <br>
+59460.694884 & $-23.2974 \pm 0.0020$ \\  <br>
+\end{tabular}  <br>
+\end{table}   <br>
 
 #### Separated columns for value and uncertainties:
 - If you want the uncertainties in a separate column, then run as follows:
