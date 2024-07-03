@@ -24,7 +24,8 @@ To use this code just clone or download this repository. The use it as follows:
 in the input "File".
 2. Run the code using the required options (see below)
 
-In the exaxmple_table.csv file you will find the follwing table:
+In the exaxmple_table.csv file you will find the follwing table including the Julkian date (column 1), 
+the radial velocity (column 2), and its symetric uncertainty (column 3), with a large number of decimal digits: 
 
 |BJD|RV|eRV|
 |---|---|---|
@@ -39,7 +40,7 @@ In the exaxmple_table.csv file you will find the follwing table:
 |59455.644156400114|-23.295624341977987|0.001898223531465|
 |59460.694884200115|-23.297414805950652|0.002026704163577|
 
-
+We want to move this to a publishable LaTeX table. Let's do it with two options:
 
 #### Joint column of value and uncertainties:
 - If you want a single column including the value and uncertainty then run with "--JOIN" option, then run as follows:
@@ -50,21 +51,21 @@ In the exaxmple_table.csv file you will find the follwing table:
  
 This will produce the following table:
 
-\begin{table}
-\begin{tabular}{cc}
-BJD & RV \\
-59397.642675 & $-23.2905 \pm 0.0021$ \\
-59403.647097 & $-23.2921 \pm 0.0022$ \\
-59408.616823 & $-23.2939 \pm 0.0022$ \\
-59412.629282 & $-23.2913 \pm 0.0021$ \\
-59420.600123 & $-23.2937 \pm 0.0021$ \\
-59425.662880 & $-23.3041 \pm 0.0022$ \\
-59430.654213 & $-23.2897 \pm 0.0018$ \\
-59446.684781 & $-23.2886 \pm 0.0020$ \\
-59455.644156 & $-23.2956 \pm 0.0019$ \\
-59460.694884 & $-23.2974 \pm 0.0020$ \\
-\end{tabular}
-\end{table}
+\begin{table} \n
+\begin{tabular}{cc} \n
+BJD & RV \\ \n
+59397.642675 & $-23.2905 \pm 0.0021$ \\ \n
+59403.647097 & $-23.2921 \pm 0.0022$ \\ \n
+59408.616823 & $-23.2939 \pm 0.0022$ \\ \n
+59412.629282 & $-23.2913 \pm 0.0021$ \\ \n
+59420.600123 & $-23.2937 \pm 0.0021$ \\ \n
+59425.662880 & $-23.3041 \pm 0.0022$ \\ \n
+59430.654213 & $-23.2897 \pm 0.0018$ \\ \n
+59446.684781 & $-23.2886 \pm 0.0020$ \\ \n
+59455.644156 & $-23.2956 \pm 0.0019$ \\ \n
+59460.694884 & $-23.2974 \pm 0.0020$ \\ \n
+\end{tabular} \n
+\end{table}  \n
 
 #### Separated columns for value and uncertainties:
 - If you want the uncertainties in a separate column, then run as follows:
