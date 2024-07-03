@@ -19,6 +19,7 @@ from astroML.stats import sigmaG
 from astropy import constants as c
 from astropy.io import ascii
 from uncertainties import ufloat
+from termcolor import colored
 
 import warnings
 warnings.filterwarnings('ignore')
@@ -36,6 +37,7 @@ def cli():
     parser = argparse.ArgumentParser()
     parser.add_argument("file", help="Table file name to be converted to tex format with appropiriate decimal figures")
     parser.add_argument("-n", "--nsig", help="Significant figures by default", default=4, type=int)
+    parser.add_argument("-j", "--JOIN", help="Join value and uncertainties in single column", action="store_true")
     args = parser.parse_args()
     return args
 
@@ -50,6 +52,21 @@ def formatNumber(n, digits):
 #	Get string to be printed
 # ==========================================
 def toprint(vv,el,eu, return_indiv=False):
+    """ Transform the values into strings with appropriate number of significant figures
+        according to the uncertainty in the measurement.
+
+        Input
+        -----
+        vv      # Value
+        el      # Lower confidence uncertainty (if assymetric)
+        eu      # Upper confidence uncertainty (if assymetric)
+
+        Optional
+        --------
+        return_indiv    # Boolean. True:  if you want to get individual values for the value and errors
+                                   False: if you want a string with $XX \pm YY$ or $XX^{+YY}_{-ZZ}$
+    """
+
     vv, el, eu = float(vv), float(el), float(eu)
 
     xl = ufloat(vv,el)
@@ -62,8 +79,6 @@ def toprint(vv,el,eu, return_indiv=False):
 
     error = np.min([el,eu])
     nsig = -int(np.floor(np.log10(abs(error))))+1
-
-    print(xx_str,xl_str,nsig)
 
     xx = round(vv,nsig)
     xx_str = formatNumber(vv,nsig)
@@ -78,8 +93,6 @@ def toprint(vv,el,eu, return_indiv=False):
         value = "$"+xx_str+" \pm "+xl_str+"$"+" \t"
     else:
         value = "$"+xx_str+"^{+"+xu_str+"}_{-"+xl_str+"}$"+" \t"
-    print(value)
-    print('\n')
 
     if return_indiv:
         return xx_str,xl_str,xu_str
@@ -92,10 +105,32 @@ def toprint(vv,el,eu, return_indiv=False):
 # ======================================
 
 if __name__ == "__main__":
-    args = cli()
 
-    root,file = os.path.split(args.file)
-    file_name = file.split('.')[0]
+    """textables
+
+    Input
+    -----
+    File       # Path to the CSV file that you want to convert. The file must be comma-separated
+                 with column headers indicating the name of the parameter. Columns corresponding to 
+                 uncertainties of each parameter (e.g., named "Param") should be named as follows:
+                 - Symetric uncertainties: "eParam"
+                 - Assymetric uncertainties: "elParam", "euParam" 
+                 If no uncertainty colum is found matching this nomenclature, then the number of 
+                 significant decimal figures used for the Param values will correspond to that specified
+                 in the --nsig option (default=6 for "BJD" columns and 4 for any other).
+
+    Optional
+    --------
+    --nsig      # Integer. Number of significant figures by default for columns with no corresponding uncertainties
+    --join      # Boolean. Join the values and uncertainties in a single column like  $XX \pm YY$ (symetric uncertainties)
+                  or $XX^{+YY}_{-ZZ}$ (asymetric uncertainties).
+
+    Output      
+    -------
+    texTable    # LaTeX table obtained from the original CSV but this time including the latex format and 
+                  appropriate number of significant decimal figures. The table will be written int he same 
+                  directory as the original file and with the same filename but ending with ".tex" 
+    """
 
     print("\n")
     print("======================")
@@ -103,12 +138,20 @@ if __name__ == "__main__":
     print("======================\n")
     print("\n")
 
-    tab = np.genfromtxt(args.file,encoding='utf-8',names=True,dtype=None,delimiter=',')
+    args = cli()
+    if args.JOIN == True:
+        return_indiv = False
+    else:
+        return_indiv = True
 
+    # Reading the file
+    root,file = os.path.split(args.file)
+    file_name = file.split('.')[0]
+    tab = np.genfromtxt(args.file,encoding='utf-8',names=True,dtype=None,delimiter=',')
     colnames = tab.dtype.names
 
+    # Initialize arrays
     done = []
-
     tab_to_print = []
     tab_to_print_colnames = []
 
@@ -118,22 +161,64 @@ if __name__ == "__main__":
 
         value = tab[col]
         value_str = []
+        # SYMMETRIC uncertainties
         if 'e'+col in colnames:
             evalue = tab['e'+col]
-            done = 'e'+col
+            done.append('e'+col)
 
             evalue_str = []
-
             for vv,el in zip(value,evalue):
-                xx_str,el_str,_ = toprint(vv,el,el,return_indiv=True)
-                value_str.append(xx_str)
-                evalue_str.append(el_str)
+                result = toprint(vv,el,el,return_indiv=return_indiv)
+                if args.JOIN:
+                    xx_str = result
+                    value_str.append(xx_str)
+                else:
+                    xx_str,el_str,_ = result
+                    value_str.append(xx_str)
+                    evalue_str.append(el_str)
 
-            tab_to_print.append(value_str)
-            tab_to_print.append(evalue_str)
+            if args.JOIN:
+                tab_to_print.append(value_str)
+                tab_to_print_colnames.append(col)
+            else:
+                tab_to_print.append(value_str)
+                tab_to_print.append(evalue_str)
+                tab_to_print_colnames.append(col)
+                tab_to_print_colnames.append('$\sigma_{\\rm '+col+'}$')
 
-            tab_to_print_colnames.append(col)
-            tab_to_print_colnames.append('$\sigma_{\rm '+col+'}$')
+        # ASSYMETRIC uncertainties
+        elif 'el'+col in colnames:
+            elow = tab['el'+col]
+            eupp = tab['eu'+col]
+            done.append('el'+col)
+            done.append('eu'+col)
+
+            elow_str = []
+            eupp_str = []
+            for vv,el,eu in zip(value,elow,eupp):
+                result = toprint(vv,el,eu,return_indiv=return_indiv)
+                if args.JOIN:
+                    xx_str = result
+                    value_str.append(xx_str)
+                else:
+                    xx_str,el_str,eu_str = result
+                    value_str.append(xx_str)
+                    elow_str.append(el_str)
+                    eupp_str.append(el_str)
+
+            if args.JOIN:
+                tab_to_print.append(value_str)
+                tab_to_print_colnames.append(col)
+            else:
+                tab_to_print.append(value_str)
+                tab_to_print.append(elow_str)
+                tab_to_print.append(eupp_str)
+
+                tab_to_print_colnames.append(col)
+                tab_to_print_colnames.append('$\sigma^{\\rm l}_{\\rm '+col+'}$')
+                tab_to_print_colnames.append('$\sigma^{\\rm u}_{\\rm '+col+'}$')
+
+        # NO uncertainties
         else:
             for vv in value:
                 xx = round(vv,args.nsig)
@@ -145,6 +230,7 @@ if __name__ == "__main__":
             tab_to_print_colnames.append(col)
 
 
+    # OUTPUT table file
     print(tab_to_print_colnames)
     t = Table(tab_to_print,names=tab_to_print_colnames)
     ascii.write(t,os.path.join(root,file_name+'.tex'),format='latex',overwrite=True)
