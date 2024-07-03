@@ -7,7 +7,7 @@
 
 | Input     | Explanation                                                                                 |
 | ---       | ---                                                                                         |
-| File      | # Path to the CSV file that you want to convert. The file must be comma-separated           | 
+| File      | # Path to the CSV file that you want to convert. The file must be comma-separated with column headers indicating the name of the parameter. Columns corresponding to          | 
 |           |     with column headers indicating the name of the parameter. Columns corresponding to      | 
 |           |     uncertainties of each parameter (e.g., named "Param") should be named as follows:       |  
 |           |     - Symetric uncertainties: "eParam"                                                      |  
