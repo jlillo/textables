@@ -91,3 +91,17 @@ BJD & RV & $\sigma_{\rm RV}$ \\\\ <br>
 59460.694884 & -23.2974 & 0.0020 \\\\ <br>
 \end{tabular} <br>
 \end{table} <br>
+
+
+### Citation and acknowledgements
+If you make use of this teeny-tiny code, please include the following acknowledgement in the *Software* section of your paper:
+
+```
+This paper made use of the \texttt{textables} code by J. Lillo-Box, publicly available at \url{https://github.com/jlillo/textables} and described in \cite{textables}
+```
+
+with the following bibtex citation:
+
+```
+
+```
