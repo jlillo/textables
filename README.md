@@ -24,6 +24,23 @@ To use this code just clone or download this repository. The use it as follows:
 in the input "File".
 2. Run the code using the required options (see below)
 
+In the exaxmple_table.csv file you will find the follwing table:
+
+|BJD|RV|eRV|
+|59397.64267499978|-23.290480994083612|0.0021458383964393|
+|59403.647097200155|-23.292125557479164|0.002215711153444|
+|59408.61682320014|-23.293933623992555|0.0021519362764250|
+|59412.629282100126|-23.29134659370688|0.0020812284867629|
+|59420.60012269998|-23.293718054199708|0.0021417367672328|
+|59425.66288019996|-23.30405301036821|0.00223620588643153|
+|59430.654212600086|-23.28968928174525|0.0017688107443666|
+|59446.684781299904|-23.28855896541092|0.0019754197127090|
+|59455.644156400114|-23.295624341977987|0.001898223531465|
+|59460.694884200115|-23.297414805950652|0.002026704163577|
+
+
+
+#### Joint column of value and uncertainties:
 - If you want a single column including the value and uncertainty then run with "--JOIN" option, then run as follows:
 
 ```
@@ -48,6 +65,7 @@ BJD & RV \\
 \end{tabular}
 \end{table}
 
+#### Separated columns for value and uncertainties:
 - If you want the uncertainties in a separate column, then run as follows:
 
 ```
